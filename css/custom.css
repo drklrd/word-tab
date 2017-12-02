@@ -1,4 +1,33 @@
 body{
 	font-family: 'Ubuntu', sans-serif;
+	overflow-y: hidden; // hide vertical
+	overflow-x: hidden; // hide horizontal
 }
 
+img {
+	-webkit-filter: brightness(30%);
+	filter:brightness(30%);
+}
+
+.word{
+	position: absolute;
+	top : 5%;
+	left: 40%;
+	color : #ffffff;
+}
+
+.title{
+	font-size : 80px;
+}
+
+.meaning{
+	margin : 25px;
+	font-size : 30px;
+	width: 720px;
+}
+
+.sentence{
+	margin : 25px;
+	font-size : 30px;
+	width: 720px;
+}
