@@ -11,7 +11,7 @@ img {
 
 .word{
 	position: absolute;
-	top : 5%;
+	top : 10%;
 	left: 40%;
 	color : #ffffff;
 }
@@ -35,4 +35,28 @@ img {
 	border-radius: 10px;
 	border: 1px solid #ffffff;
 	float: left;
+}
+
+.icon{
+	cursor: pointer;
+	margin : 50px;
+	font-size: 40px !important;
+}
+
+.dot{
+	font-size: 40px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.tools{
+	color : #ffffff;
+	position: absolute;
+	top : 10%;
+	left: 90%;
+	opacity: 0.5;
+}
+
+.itallics{
+	font-style: italic;
 }

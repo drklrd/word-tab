@@ -25,10 +25,23 @@ class App extends React.Component{
 		let hintTemplate =
 							<div>
 									<div className="meaning-sentence">
-										meaning &#xb7; {randomWord.meaning}
+										meaning
+										<span className="dot">
+											&#xb7;
+										</span>
+										<span className="itallics">
+											{randomWord.meaning}
+										</span>
+
 									</div>
 									<div className="meaning-sentence">
-										usage &#xb7; {randomWord.sentence}
+										usage
+										<span className="dot">
+											&#xb7;
+										</span>
+										<span className="itallics">
+											{randomWord.sentence}
+										</span>
 									</div>
 							</div>
 
@@ -38,6 +51,7 @@ class App extends React.Component{
 				<div className="word">
 					<div className="title">
                         {randomWord.word}
+
 					</div>
 					{
 						this.state.hintVisible && hintTemplate
@@ -48,6 +62,11 @@ class App extends React.Component{
 							<button onClick={this.showHint} className="show-meaning">Show meaning</button>
 						</div>
 					}
+				</div>
+				<div className="tools">
+					<span className="glyphicon glyphicon-ok icon"></span>
+					<span className="glyphicon glyphicon-remove icon"></span>
+					<span className="glyphicon glyphicon-heart-empty icon"></span>
 				</div>
 			</div>
 		)
