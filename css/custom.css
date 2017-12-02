@@ -20,14 +20,19 @@ img {
 	font-size : 80px;
 }
 
-.meaning{
-	margin : 25px;
+.meaning-sentence{
+	margin : 35px;
 	font-size : 30px;
 	width: 720px;
 }
 
-.sentence{
-	margin : 25px;
-	font-size : 30px;
-	width: 720px;
+.show-meaning{
+	margin: 35px;
+	background-color: #000000;
+	border: none;
+	color: #ffffff;
+	padding:10px;
+	border-radius: 10px;
+	border: 1px solid #ffffff;
+	float: left;
 }
