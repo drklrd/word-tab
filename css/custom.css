@@ -1,7 +1,8 @@
 body{
 	font-family: 'Ubuntu', sans-serif;
-	overflow-y: hidden; // hide vertical
-	overflow-x: hidden; // hide horizontal
+	overflow: hidden;
+	overflow-y: hidden !important; // hide vertical
+	overflow-x: hidden !important; // hide horizontal
 }
 
 img {
@@ -10,9 +11,9 @@ img {
 }
 
 .word{
-	position: absolute;
+	position: fixed;
 	top : 10%;
-	left: 35%;
+	left: 45%;
 	color : #ffffff;
 }
 
@@ -27,13 +28,12 @@ img {
 }
 
 .show-meaning{
-	margin: 35px;
 	background-color: #000000;
 	border: none;
 	color: #ffffff;
 	padding:10px;
 	border-radius: 10px;
-	border: 1px solid #ffffff;
+	border: 2px solid #ffffff;
 	float: left;
 }
 

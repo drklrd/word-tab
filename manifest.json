@@ -1,6 +1,6 @@
 {
 	"manifest_version": 2,
-	"name": "Code Tab",
+	"name": "Word Tab",
 	"description": "This is a chrome extension",
 	"version": "1.0",
 	"icons": {
