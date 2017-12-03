@@ -1,10 +1,5 @@
-# Code-Tab
+# Word Tab.
 
-Get code-editor in each new tab (chrome browser). The code-editor used is React-Ace(https://github.com/securingsincity/react-ace)
+## New tab based Chrome extension that shows a random word from a list every 5 minutes. There's also an option to add the word as favorite.
 
-- [ ] First clone or download the repo and extract (if downloaded as zip)
-- [ ] Run npm install and then npm run development
-- [ ] Go to chrome://extensions
-- [ ] Click Load unpacked extension
-- [ ] Select the cloned or extracted directory (which directly contains manifest.json file inside)
-- [ ] Now the extension should show up whenever you open a new tab
+![Wordtab Image](https://raw.githubusercontent.com/drklrd/word-tab/master/wordtab.png)
