@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Words from './words.json';
 
-let randomWord = Words.words[Math.floor(Math.random() * Words.words.length)];
+let randomordIndex =Math.floor(Math.random() * Words.words.length);
+let randomWord = Words.words[randomordIndex];
 
 class App extends React.Component{
 
@@ -12,6 +13,13 @@ class App extends React.Component{
 			hintVisible : false
 		};
 		this.showHint = this.showHint.bind(this);
+		this.addToFavorite = this.addToFavorite.bind(this);
+	}
+
+	componentDidMount(){
+        chrome.storage.local.get('favorites', (result) => {
+            console.log('***',result);
+        });
 	}
 
 	showHint(){
@@ -20,8 +28,17 @@ class App extends React.Component{
 		});
 	}
 
-	render(){
+	addToFavorite(wordIndex){
+        chrome.storage.local.get('favorites', (result) => {
+        	let favorites = result.favorites || [] ;
+        	favorites.push(wordIndex);
+            chrome.storage.local.set({
+                'favorites': favorites
+            });
+        });
+	}
 
+	render(){
 		let hintTemplate =
 							<div>
 									<div className="meaning-sentence">
@@ -51,6 +68,7 @@ class App extends React.Component{
 				<div className="word">
 					<div className="title">
                         {randomWord.word}
+						<span onClick={()=>{this.addToFavorite(randomordIndex)}} className="glyphicon glyphicon-heart-empty icon"></span>
 
 					</div>
 					{
@@ -64,9 +82,7 @@ class App extends React.Component{
 					}
 				</div>
 				<div className="tools">
-					<span className="glyphicon glyphicon-ok icon"></span>
-					<span className="glyphicon glyphicon-remove icon"></span>
-					<span className="glyphicon glyphicon-heart-empty icon"></span>
+
 				</div>
 			</div>
 		)

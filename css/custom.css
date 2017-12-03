@@ -12,7 +12,7 @@ img {
 .word{
 	position: absolute;
 	top : 10%;
-	left: 40%;
+	left: 35%;
 	color : #ffffff;
 }
 
@@ -41,6 +41,7 @@ img {
 	cursor: pointer;
 	margin : 50px;
 	font-size: 40px !important;
+	opacity: 0.5;
 }
 
 .dot{
