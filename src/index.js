@@ -26,7 +26,8 @@ chrome.storage.local.get('lastword', (result) => {
     		if(result.lastword.split('_')[2]){
     			isLastWordActive = true;
     		}
-    		randomWord = Words.words[result.lastword.split('_')[1]];	
+            randomordIndex = result.lastword.split('_')[1];
+    		randomWord = Words.words[randomordIndex];
     	}
     }
     ReactDOM.render(<App/>,document.getElementById("app"));
@@ -38,6 +39,7 @@ class App extends React.Component{
 		super(props);
 		this.state = {
 			hintVisible : false,
+			favorited : false,
             bgImg : images[Math.floor(Math.random()*images.length)]
 		};
 		this.showHint = this.showHint.bind(this);
@@ -46,7 +48,11 @@ class App extends React.Component{
 
 	componentDidMount(){
         chrome.storage.local.get('favorites', (result) => {
-            console.log('***',result);
+            if(result.favorites && result.favorites.length && result.favorites.indexOf(randomordIndex) !== -1){
+            	this.setState({
+                    favorited : true
+				})
+			}
         });
 	}
 
@@ -70,7 +76,11 @@ class App extends React.Component{
             chrome.storage.local.set({
                 'favorites': favorites
             });
+            this.setState({
+                favorited : true
+			})
         });
+
 	}
 
 	render(){
@@ -96,15 +106,14 @@ class App extends React.Component{
 										</span>
 									</div>
 							</div>
-
+		let heartClass = 'glyphicon '+ (this.state.favorited ? 'glyphicon-heart ' : 'glyphicon-heart-empty ') +'icon';
 		return(
 			<div className="container row app-background">
 				<img  src={"img/"+this.state.bgImg+".jpg"} alt="Img" />
 				<div className="word">
 					<div className="title">
                         {randomWord.word}
-						<span onClick={()=>{this.addToFavorite(randomordIndex)}} className="glyphicon glyphicon-heart-empty icon"></span>
-
+						<span onClick={()=>{this.addToFavorite(randomordIndex)}} className={heartClass}></span>
 					</div>
 					{
 						(this.state.hintVisible || isLastWordActive) && hintTemplate
