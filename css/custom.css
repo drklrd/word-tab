@@ -10,6 +10,7 @@ img {
 	filter:brightness(30%);
 }
 
+
 .word{
 	position: fixed;
 	top : 10%;
@@ -64,4 +65,31 @@ img {
 
 .itallics{
 	font-style: italic;
+}
+
+.view-favorites{
+	position :absolute;
+	top : 5%;
+	color: #ffffff;
+	left : 85%;
+	cursor: pointer;
+	margin-left: 35px;
+	font-size: 14px !important;
+}
+
+.favorite-words{
+	position: fixed;
+	top : 10%;
+	left: 5%;
+	color: #ffffff;
+}
+
+.each-word {
+	cursor: pointer;
+	float : left;
+	margin : 15px;
+	border : 2px solid #ffffff;
+	border-radius: 8px;
+	font-size: 44px !important;
+	padding: 10px;
 }
