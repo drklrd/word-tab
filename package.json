@@ -18,8 +18,10 @@
   },
   "dependencies": {
     "material-ui": "^1.0.0-beta.22",
+    "radium": "^0.19.6",
     "react": "^16.2.0",
     "react-ace": "^5.7.0",
+    "react-animations": "^1.0.0",
     "react-dom": "^16.2.0"
   }
 }

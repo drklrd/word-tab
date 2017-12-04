@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Words from './words.json';
+import HintTemplate from './hintTemplate';
+import { wobble } from 'react-animations';
+import Radium, {StyleRoot} from 'radium';
 
 let randomordIndex = Math.floor(Math.random() * Words.words.length);
 let randomWord = Words.words[randomordIndex];
 let isLastWordActive = false;
-
 let images = ['coffee','balloon','book'];
 
 function updateLastWordStorage(){
@@ -15,6 +17,12 @@ function updateLastWordStorage(){
         'lastword': Date.now()+'_'+randomordIndex
     });
 }
+const styles = {
+    bounce: {
+        animation: 'x 1s',
+        animationName: Radium.keyframes(wobble, 'wobble')
+    }
+};
 
 chrome.storage.local.get('lastword', (result) => {
     if(!result.lastword){
@@ -91,7 +99,6 @@ class App extends React.Component{
 	}
 
 	viewFavorites(){
-
         chrome.storage.local.get('favorites', (result) => {
             let favorites = result.favorites;
             this.setState({
@@ -111,33 +118,10 @@ class App extends React.Component{
                 this.isFavoriteWord();
             })
 		}
-
 	}
 
 	render(){
-		let hintTemplate =
-							<div>
-								<div className="meaning-sentence">
-									meaning
-									<span className="dot">
-										&#xb7;
-									</span>
-									<span className="itallics">
-										{randomWord.meaning}
-									</span>
-
-								</div>
-								<div className="meaning-sentence">
-									usage
-									<span className="dot">
-										&#xb7;
-									</span>
-									<span className="itallics">
-										{randomWord.sentence}
-									</span>
-								</div>
-							</div>
-
+		let hintTemplate = <HintTemplate randomWord={randomWord} />;
 		if(this.state.viewFavorites){
 			if(this.state.favoritesItems && this.state.favoritesItems.length){
 				var items = this.state.favoritesItems;
@@ -152,7 +136,6 @@ class App extends React.Component{
                 );
             })
 		}
-
 		let heartClass = 'glyphicon '+ (this.state.favorited ? 'glyphicon-heart ' : 'glyphicon-heart-empty ') +'icon';
 		return(
 			<div className="container row app-background">
@@ -160,21 +143,23 @@ class App extends React.Component{
 				{
 					!this.state.viewFavorites &&
 					<div className="word">
-						<div className="title">
-                            {randomWord.word}
-							<span onClick={()=>{this.addToFavorite(randomordIndex)}} className={heartClass}></span>
-
-						</div>
-                        {
-                            (this.state.hintVisible || isLastWordActive) && hintTemplate
-                        }
-                        {
-                            !this.state.hintVisible && !isLastWordActive &&
+							<div className="title">
+								<StyleRoot>
+									<div style={styles.bounce}>
+										{randomWord.word}
+										<span onClick={()=>{this.addToFavorite(randomordIndex)}} className={heartClass}></span>
+									</div>
+								</StyleRoot>
+							</div>
+						{
+							(this.state.hintVisible || isLastWordActive) && hintTemplate
+						}
+						{
+							!this.state.hintVisible && !isLastWordActive &&
 							<div>
 								<button onClick={this.showHint} className="show-meaning">Show meaning</button>
 							</div>
-                        }
-
+						}
 					</div>
 				}
 				{
