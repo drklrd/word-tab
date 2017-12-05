@@ -2,8 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Words from './words.json';
 import HintTemplate from './hintTemplate';
-import { wobble } from 'react-animations';
+import * as ReactAnimations from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
+
+const animationTypes = Object.keys(ReactAnimations).filter((key)=>{ // get available animation styles from React-Animations. The type property will be object for any animation style.
+	if(typeof ReactAnimations[key] === 'object') return key;
+})
+let selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
 
 let randomordIndex = Math.floor(Math.random() * Words.words.length);
 let randomWord = Words.words[randomordIndex];
@@ -17,10 +22,11 @@ function updateLastWordStorage(){
         'lastword': Date.now()+'_'+randomordIndex
     });
 }
+
 const styles = {
     bounce: {
         animation: 'x 1s',
-        animationName: Radium.keyframes(wobble, 'wobble')
+        animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
     }
 };
 
