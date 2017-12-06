@@ -131,7 +131,9 @@ class App extends React.Component{
             bounce: {
                 animation: 'x 1s',
                 animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
-            }
+            },
+            bgImg : images[Math.floor(Math.random()*images.length)],
+            viewFavorites : false
 		})
 	}
 
