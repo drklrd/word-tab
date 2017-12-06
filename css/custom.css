@@ -77,6 +77,16 @@ img {
 	font-size: 14px !important;
 }
 
+.reload{
+	position :absolute;
+	top : 15%;
+	color: #ffffff;
+	opacity: 0.5;
+	left : 87%;
+	cursor: pointer;
+	font-size: 60px !important;
+}
+
 .favorite-words{
 	position: fixed;
 	top : 10%;

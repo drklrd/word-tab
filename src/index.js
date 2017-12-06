@@ -8,8 +8,7 @@ import Radium, {StyleRoot} from 'radium';
 const animationTypes = Object.keys(ReactAnimations).filter((key)=>{ // get available animation styles from React-Animations. The type property will be object for any animation style.
 	if(typeof ReactAnimations[key] === 'object') return key;
 })
-let selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
-
+let selectedAnimation;
 let randomordIndex = Math.floor(Math.random() * Words.words.length);
 let randomWord = Words.words[randomordIndex];
 let isLastWordActive = false;
@@ -22,13 +21,6 @@ function updateLastWordStorage(){
         'lastword': Date.now()+'_'+randomordIndex
     });
 }
-
-const styles = {
-    bounce: {
-        animation: 'x 1s',
-        animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
-    }
-};
 
 chrome.storage.local.get('lastword', (result) => {
     if(!result.lastword){
@@ -51,14 +43,21 @@ class App extends React.Component{
 
 	constructor(props){
 		super(props);
+        selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
 		this.state = {
 			hintVisible : false,
 			favorited : false,
 			viewFavorites : false,
-            bgImg : images[Math.floor(Math.random()*images.length)]
+            bgImg : images[Math.floor(Math.random()*images.length)],
+            selectedAnimation : animationTypes[Math.floor(Math.random() * animationTypes.length)],
+            bounce: {
+                animation: 'x 1s',
+                animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
+            }
 		};
 		this.showHint = this.showHint.bind(this);
 		this.addToFavorite = this.addToFavorite.bind(this);
+		this.reload = this.reload.bind(this);
 	}
 
 	isFavoriteWord(){
@@ -126,6 +125,16 @@ class App extends React.Component{
 		}
 	}
 
+    reload(){
+        selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
+        this.setState({
+            bounce: {
+                animation: 'x 1s',
+                animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
+            }
+		})
+	}
+
 	render(){
 		let hintTemplate = <HintTemplate randomWord={randomWord} />;
 		if(this.state.viewFavorites){
@@ -151,7 +160,7 @@ class App extends React.Component{
 					<div className="word">
 							<div className="title">
 								<StyleRoot>
-									<div style={styles.bounce}>
+									<div style={this.state.bounce}>
 										{randomWord.word}
 										<span onClick={()=>{this.addToFavorite(randomordIndex)}} className={heartClass}></span>
 									</div>
@@ -160,7 +169,7 @@ class App extends React.Component{
 						{
 							(this.state.hintVisible || isLastWordActive) &&
 							<StyleRoot>
-								<div style={styles.bounce}>
+								<div style={this.state.bounce}>
 									{ hintTemplate }
 								</div>
 							</StyleRoot>
@@ -184,6 +193,9 @@ class App extends React.Component{
 					!this.state.viewFavorites &&
 					<span onClick={()=>{this.viewFavorites()}} className={'view-favorites'}>View favorites</span>
 				}
+				<div className="reload">
+					<span onClick={this.reload}  className="glyphicon glyphicon-refresh"></span>
+				</div>
 			</div>
 		)
 	}
