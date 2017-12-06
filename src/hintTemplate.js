@@ -8,21 +8,21 @@ export default class HintTemplate extends React.Component{
                 <div className="meaning-sentence">
                     meaning
                     <span className="dot">
-										&#xb7;
-									</span>
+                        &#xb7;
+                    </span>
                     <span className="itallics">
-										{this.props.randomWord.meaning}
-									</span>
+                        {this.props.randomWord.meaning}
+                    </span>
 
                 </div>
                 <div className="meaning-sentence">
                     usage
                     <span className="dot">
-										&#xb7;
-									</span>
+                        &#xb7;
+                    </span>
                     <span className="itallics">
-										{this.props.randomWord.sentence}
-									</span>
+                        {this.props.randomWord.sentence}
+                    </span>
                 </div>
             </div>
         );

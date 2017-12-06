@@ -158,7 +158,12 @@ class App extends React.Component{
 								</StyleRoot>
 							</div>
 						{
-							(this.state.hintVisible || isLastWordActive) && hintTemplate
+							(this.state.hintVisible || isLastWordActive) &&
+							<StyleRoot>
+								<div style={styles.bounce}>
+									{ hintTemplate }
+								</div>
+							</StyleRoot>
 						}
 						{
 							!this.state.hintVisible && !isLastWordActive &&
