@@ -16,6 +16,7 @@ let randomWord = Words.words[randomordIndex];
 let isLastWordActive = false;
 let images = ['coffee','balloon','book'];
 let repeatEvery;
+let showMeaning;
 
 function updateLastWordStorage(){
     randomordIndex =Math.floor(Math.random() * Words.words.length);
@@ -34,22 +35,33 @@ chrome.storage.local.get('repeatEvery',(result)=>{
 	}else{
         repeatEvery = Number(result.repeatEvery);
 	}
+	chrome.storage.local.get('showMeaning',(meaningResult)=>{
 
-    chrome.storage.local.get('lastword', (result) => {
-        if(!result.lastword){
-            updateLastWordStorage();
+        if(meaningResult.showMeaning == undefined){
+            showMeaning = false;
+            chrome.storage.local.set({
+                'showMeaning': showMeaning
+            });
         }else{
-            if((Date.now()-result.lastword.split('_')[0] > (repeatEvery * 60 * 1000)) || ( repeatEvery != undefined && repeatEvery == 0)){
+            showMeaning = meaningResult.showMeaning;
+        }
+        console.log('>>>>',showMeaning)
+        chrome.storage.local.get('lastword', (result) => {
+            if(!result.lastword){
                 updateLastWordStorage();
             }else{
-                if(result.lastword.split('_')[2]){
-                    isLastWordActive = true;
+                if((Date.now()-result.lastword.split('_')[0] > (repeatEvery * 60 * 1000)) || ( repeatEvery != undefined && repeatEvery == 0)){
+                    updateLastWordStorage();
+                }else{
+                    if(result.lastword.split('_')[2]){
+                        isLastWordActive = false;
+                    }
+                    randomordIndex = result.lastword.split('_')[1];
+                    randomWord = Words.words[randomordIndex];
                 }
-                randomordIndex = result.lastword.split('_')[1];
-                randomWord = Words.words[randomordIndex];
             }
-        }
-        ReactDOM.render(<App/>,document.getElementById("app"));
+            ReactDOM.render(<App/>,document.getElementById("app"));
+        });
     });
 })
 
@@ -61,7 +73,7 @@ class App extends React.Component{
 		super(props);
         selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
 		this.state = {
-			hintVisible : false,
+			hintVisible : showMeaning,
 			viewSettings : false,
 			favorited : false,
 			viewFavorites : false,
@@ -71,7 +83,9 @@ class App extends React.Component{
                 animation: 'x 1s',
                 animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
             },
-			showEveryXMinutes : repeatEvery
+			showEveryXMinutes : repeatEvery,
+            showMeaning : showMeaning
+
 		};
 		this.showHint = this.showHint.bind(this);
 		this.addToFavorite = this.addToFavorite.bind(this);
@@ -197,7 +211,7 @@ class App extends React.Component{
 
 							</div>
 						{
-							(this.state.hintVisible || isLastWordActive) &&
+							(this.state.hintVisible) &&
 							<StyleRoot>
 								<div style={this.state.bounce}>
 									{ hintTemplate }
@@ -224,6 +238,7 @@ class App extends React.Component{
 					<div className="settings">
 						<Slider
 							showEveryXMinutes={this.state.showEveryXMinutes}
+                            showMeaning = {this.state.showMeaning}
 						/>
 					</div>
 				}

@@ -1,15 +1,19 @@
 import React from 'react';
 import Slider from 'react-rangeslider';
-import 'react-rangeslider/lib/index.css'
+import 'react-rangeslider/lib/index.css';
+import Switch from 'react-toggle-switch';
+import 'react-toggle-switch/dist/css/switch.min.css';
 
 export default class extends React.Component{
 
     constructor(props){
         super(props);
         this.state = {
-            showEveryXMinutes : this.props.showEveryXMinutes
+            showEveryXMinutes : this.props.showEveryXMinutes,
+            switched : this.props.showMeaning == 'true' ? true : false
         };
         this.sliderChanged = this.sliderChanged.bind(this);
+        this.toggleSwitch = this.toggleSwitch.bind(this);
     }
 
     sliderChanged(value){
@@ -21,9 +25,21 @@ export default class extends React.Component{
         });
     }
 
+    toggleSwitch(){
+        let switchState = !this.state.switched;
+        this.setState({
+            'switched' : switchState
+        });
+        chrome.storage.local.set({
+            'showMeaning': switchState ? 'true' : 'false'
+        });
+    }
+
     render(){
         return(
             <div>
+                <h1>Settings</h1>
+                <h3>Next Word Interval</h3>
                 <h5>
                     Adjust the time for every next word here.
                 </h5>
@@ -55,6 +71,30 @@ export default class extends React.Component{
                         </h3>
                     }
                 </h5>
+                <hr/>
+                <h3> Word Meaning Behaviour </h3>
+                <div>
+                    <h5>
+                        Select if you want to show the meaning on default
+                    </h5>
+                    <Switch  onClick={this.toggleSwitch} on={this.state.switched} />
+                    <h5>
+                        {
+                            !this.state.switched &&
+                            <span>
+                                Currently, this option is turned OFF, so you will not be seeing meaning on default
+                            </span>
+                        }
+                        {
+                            this.state.switched &&
+                            <span>
+                                Currently, this option is turned ON, so you will see meaning on default
+                            </span>
+                        }
+
+                    </h5>
+                </div>
+
             </div>
 
 

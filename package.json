@@ -25,6 +25,7 @@
     "react-ace": "^5.7.0",
     "react-animations": "^1.0.0",
     "react-dom": "^16.2.0",
-    "react-rangeslider": "^2.2.0"
+    "react-rangeslider": "^2.2.0",
+    "react-toggle-switch": "^3.0.3"
   }
 }

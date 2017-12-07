@@ -133,6 +133,6 @@ img {
 	cursor: pointer;
 }
 .rangeslider__fill {
-	background-color: #ffffff !important;
-	color : #ffffff !important;
+	background-color: green !important;
+	color : green !important;
 }
