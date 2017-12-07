@@ -38,14 +38,14 @@ chrome.storage.local.get('repeatEvery',(result)=>{
 	chrome.storage.local.get('showMeaning',(meaningResult)=>{
 
         if(meaningResult.showMeaning == undefined){
-            showMeaning = false;
+            showMeaning = 'false';
             chrome.storage.local.set({
                 'showMeaning': showMeaning
             });
         }else{
             showMeaning = meaningResult.showMeaning;
         }
-        console.log('>>>>',showMeaning)
+        showMeaning = showMeaning =='true' ? true : false;
         chrome.storage.local.get('lastword', (result) => {
             if(!result.lastword){
                 updateLastWordStorage();
@@ -54,7 +54,7 @@ chrome.storage.local.get('repeatEvery',(result)=>{
                     updateLastWordStorage();
                 }else{
                     if(result.lastword.split('_')[2]){
-                        isLastWordActive = false;
+                        isLastWordActive = true;
                     }
                     randomordIndex = result.lastword.split('_')[1];
                     randomWord = Words.words[randomordIndex];
@@ -211,7 +211,7 @@ class App extends React.Component{
 
 							</div>
 						{
-							(this.state.hintVisible) &&
+							(this.state.hintVisible || isLastWordActive) &&
 							<StyleRoot>
 								<div style={this.state.bounce}>
 									{ hintTemplate }

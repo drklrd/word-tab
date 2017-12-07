@@ -10,7 +10,7 @@ export default class extends React.Component{
         super(props);
         this.state = {
             showEveryXMinutes : this.props.showEveryXMinutes,
-            switched : this.props.showMeaning == 'true' ? true : false
+            switched : this.props.showMeaning
         };
         this.sliderChanged = this.sliderChanged.bind(this);
         this.toggleSwitch = this.toggleSwitch.bind(this);
