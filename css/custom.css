@@ -3,6 +3,12 @@ body{
 	overflow: hidden;
 	overflow-y: hidden !important; // hide vertical
 	overflow-x: hidden !important; // hide horizontal
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 img {
@@ -77,6 +83,16 @@ img {
 	font-size: 14px !important;
 }
 
+.view-settings{
+	position :absolute;
+	top : 25%;
+	color: #ffffff;
+	opacity: 0.5;
+	left : 87%;
+	cursor: pointer;
+	font-size: 40px !important;
+}
+
 .reload{
 	position :absolute;
 	top : 15%;
@@ -84,7 +100,7 @@ img {
 	opacity: 0.5;
 	left : 87%;
 	cursor: pointer;
-	font-size: 60px !important;
+	font-size: 40px !important;
 }
 
 .favorite-words{
@@ -92,6 +108,15 @@ img {
 	top : 10%;
 	left: 5%;
 	color: #ffffff;
+}
+
+.settings{
+	position: absolute;
+	top : 20%;
+	left: 40%;
+	width : 500px;
+	color: #ffffff;
+	opacity: 0.8;
 }
 
 .each-word {
@@ -102,4 +127,12 @@ img {
 	border-radius: 8px;
 	font-size: 44px !important;
 	padding: 10px;
+}
+
+.slider {
+	cursor: pointer;
+}
+.rangeslider__fill {
+	background-color: #ffffff !important;
+	color : #ffffff !important;
 }

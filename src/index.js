@@ -4,6 +4,8 @@ import Words from './words.json';
 import HintTemplate from './hintTemplate';
 import * as ReactAnimations from 'react-animations';
 import Radium, {StyleRoot} from 'radium';
+import Slider from './Slider';
+
 
 const animationTypes = Object.keys(ReactAnimations).filter((key)=>{ // get available animation styles from React-Animations. The type property will be object for any animation style.
 	if(typeof ReactAnimations[key] === 'object') return key;
@@ -13,6 +15,7 @@ let randomordIndex = Math.floor(Math.random() * Words.words.length);
 let randomWord = Words.words[randomordIndex];
 let isLastWordActive = false;
 let images = ['coffee','balloon','book'];
+let repeatEvery;
 
 function updateLastWordStorage(){
     randomordIndex =Math.floor(Math.random() * Words.words.length);
@@ -22,22 +25,35 @@ function updateLastWordStorage(){
     });
 }
 
-chrome.storage.local.get('lastword', (result) => {
-    if(!result.lastword){
-        updateLastWordStorage();
-    }else{
-    	if(Date.now()-result.lastword.split('_')[0] > (5 * 60 * 1000)){
+chrome.storage.local.get('repeatEvery',(result)=>{
+	if(!result.repeatEvery){
+        repeatEvery = 5;
+		chrome.storage.local.set({
+            'repeatEvery': repeatEvery
+        });
+	}else{
+        repeatEvery = Number(result.repeatEvery);
+	}
+
+    chrome.storage.local.get('lastword', (result) => {
+        if(!result.lastword){
             updateLastWordStorage();
-    	}else{
-    		if(result.lastword.split('_')[2]){
-    			isLastWordActive = true;
-    		}
-            randomordIndex = result.lastword.split('_')[1];
-    		randomWord = Words.words[randomordIndex];
-    	}
-    }
-    ReactDOM.render(<App/>,document.getElementById("app"));
-});
+        }else{
+            if((Date.now()-result.lastword.split('_')[0] > (repeatEvery * 60 * 1000)) || ( repeatEvery != undefined && repeatEvery == 0)){
+                updateLastWordStorage();
+            }else{
+                if(result.lastword.split('_')[2]){
+                    isLastWordActive = true;
+                }
+                randomordIndex = result.lastword.split('_')[1];
+                randomWord = Words.words[randomordIndex];
+            }
+        }
+        ReactDOM.render(<App/>,document.getElementById("app"));
+    });
+})
+
+
 
 class App extends React.Component{
 
@@ -46,6 +62,7 @@ class App extends React.Component{
         selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
 		this.state = {
 			hintVisible : false,
+			viewSettings : false,
 			favorited : false,
 			viewFavorites : false,
             bgImg : images[Math.floor(Math.random()*images.length)],
@@ -53,7 +70,8 @@ class App extends React.Component{
             bounce: {
                 animation: 'x 1s',
                 animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
-            }
+            },
+			showEveryXMinutes : repeatEvery
 		};
 		this.showHint = this.showHint.bind(this);
 		this.addToFavorite = this.addToFavorite.bind(this);
@@ -108,9 +126,17 @@ class App extends React.Component{
             let favorites = result.favorites;
             this.setState({
                 viewFavorites : true,
+                viewSettings : false,
 				favoritesItems : result.favorites
             });
         });
+	}
+
+    viewSettings(){
+		this.setState({
+            viewFavorites : false,
+			viewSettings : true
+		})
 	}
 
     viewSpecificFavorite(favoriteIndex){
@@ -133,7 +159,8 @@ class App extends React.Component{
                 animationName: Radium.keyframes(ReactAnimations[selectedAnimation], `${selectedAnimation}`)
             },
             bgImg : images[Math.floor(Math.random()*images.length)],
-            viewFavorites : false
+            viewFavorites : false,
+			viewSettings : false
 		})
 	}
 
@@ -158,7 +185,7 @@ class App extends React.Component{
 			<div className="container row app-background">
 				<img  src={"img/"+this.state.bgImg+".jpg"} alt="Img" />
 				{
-					!this.state.viewFavorites &&
+					!this.state.viewFavorites && !this.state.viewSettings &&
 					<div className="word">
 							<div className="title">
 								<StyleRoot>
@@ -167,6 +194,7 @@ class App extends React.Component{
 										<span onClick={()=>{this.addToFavorite(randomordIndex)}} className={heartClass}></span>
 									</div>
 								</StyleRoot>
+
 							</div>
 						{
 							(this.state.hintVisible || isLastWordActive) &&
@@ -192,9 +220,21 @@ class App extends React.Component{
 
 				}
 				{
+					this.state.viewSettings &&
+					<div className="settings">
+						<Slider
+							showEveryXMinutes={this.state.showEveryXMinutes}
+						/>
+					</div>
+				}
+				{
 					!this.state.viewFavorites &&
 					<span onClick={()=>{this.viewFavorites()}} className={'view-favorites'}>View favorites</span>
 				}
+                {
+                    !this.state.viewSettings &&
+					<span onClick={()=>{this.viewSettings()}} className={'view-settings glyphicon glyphicon-cog '}></span>
+                }
 				<div className="reload">
 					<span onClick={this.reload}  className="glyphicon glyphicon-refresh"></span>
 				</div>
@@ -202,5 +242,3 @@ class App extends React.Component{
 		)
 	}
 }
-
-ReactDOM.render(<App/>,document.getElementById("app"));
